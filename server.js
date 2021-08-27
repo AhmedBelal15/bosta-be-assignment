@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const cors = require('cors')
 require("colors");
 const connectDB = require("./config/db");
+const router = require('./router');
+
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -22,6 +24,9 @@ if (process.env.NODE_ENV === "development") {
 
 // Enable CORS
 app.use(cors());
+
+//Mount router
+app.use(router)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
