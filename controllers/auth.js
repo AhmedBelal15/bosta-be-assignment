@@ -1,5 +1,5 @@
 const asyncHandler = require("../middleware/asyncHandler");
-const validator = require("../middleware/validator");
+const validator = require("../middleware/authValidator");
 const generateVerificationEmail = require("../services/auth/generateVerificationEmail");
 const hashingService = require("../services/auth/hashingService");
 const jwt = require("jsonwebtoken");
