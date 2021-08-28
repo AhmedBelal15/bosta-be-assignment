@@ -10,4 +10,4 @@ const matchingPassword = async (plainTextPassword, hashedPassword) => {
   const match = await bcrypt.compare(plainTextPassword, password);
   return match;
 };
-module.exports = { hashPassword };
+module.exports = { hashPassword, matchingPassword };
