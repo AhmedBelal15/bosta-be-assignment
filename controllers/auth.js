@@ -1,8 +1,8 @@
 const asyncHandler = require("../middleware/asyncHandler");
 const validator = require("../middleware/validator");
 const generateVerificationEmail = require("../services/auth/generateVerificationEmail");
-const hashPassword = require("../utils/hashPassword");
-const jwt = require('jsonwebtoken');
+const hashingService = require("../services/auth/hashingService");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 /**
@@ -17,7 +17,7 @@ const register = asyncHandler(async (req, res, next) => {
   await registerValidator.validateAsync(req.body);
 
   //Hash password
-  const hashedPassword = await hashPassword(req.body.password);
+  const hashedPassword = await hashingService.hashPassword(req.body.password);
   //Register user
   const user = await User.create({
     name: req.body.name,
@@ -54,9 +54,61 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
   );
 
   res.status(200).json({
-      success: true,
-      message: 'Email verified successfully.'
-  })
+    success: true,
+    message: "Email verified successfully.",
+  });
 });
 
-module.exports = { register, verifyEmail };
+/**
+ * @description     Login user
+ * @method          POST /api/v1/auth/login
+ * @access          Public
+ */
+
+const login = asyncHandler(async (req, res, next) => {
+  //Validate request
+  const loginValidator = validator.login;
+  await loginValidator.validateAsync(req.body);
+
+  // Get user from database
+  const user = await User.findOne({ email: req.body.email }).select(
+    "+password"
+  );
+  if (!user) {
+    return next(new Error("Invalid Credentials"));
+  }
+
+  //Compare password with the hashed one
+  const isMatch = await hashingService.matchingPassword(
+    req.body.password,
+    user.password
+  );
+  if (!isMatch) {
+    return next(new Error("Invalid Credentials"));
+  }
+
+  // check if user is verified
+  if (!user.isVerified) {
+    return next(new Error("Plaese verify your email first"));
+  }
+
+  //Sign JWT Token
+  const accessToken = jwt.sign(
+    { id: user._id, email: user.email },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRESIN }
+  );
+  const refreshToken = jwt.sign(
+    { id: user._id, email: user.email },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRESIN }
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "User logged in successfully",
+    data: { accessToken, refreshToken },
+  });
+});
+
+module.exports = { register, verifyEmail, login };
