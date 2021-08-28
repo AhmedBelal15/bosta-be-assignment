@@ -12,8 +12,8 @@ const login = Joi.object({
   password: Joi.string().min(6).max(255).required(),
 });
 
-//Forgot Password Request Validation
-const forgotPassword = Joi.object({
+//Email Validation
+const email = Joi.object({
   email: Joi.string().max(255).required().email(),
 });
 
@@ -25,6 +25,6 @@ const updatePassword = Joi.object({
 module.exports = {
   register,
   login,
-  forgotPassword,
+  email,
   updatePassword,
 };
