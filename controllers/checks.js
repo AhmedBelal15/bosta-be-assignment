@@ -1,6 +1,6 @@
 const asyncHandler = require("../middleware/asyncHandler");
 const checkValidator = require("../middleware/checksValidator");
-const Check = require('../models/Check');
+const Check = require("../models/Check");
 
 /**
  * @description     Create Check
@@ -15,12 +15,12 @@ const createCheck = asyncHandler(async (req, res, next) => {
   // Add user id to the req.body before saving it to data base
   req.body.user = req.user.id;
 
-  const check = await Check.create(req.body)
+  const check = await Check.create(req.body);
   res.status(200).json({
-      success: true,
-      data: check,
-      tokens: req.tokens
-  })
+    success: true,
+    data: check,
+    tokens: req.tokens,
+  });
 });
 
 /**
@@ -28,40 +28,39 @@ const createCheck = asyncHandler(async (req, res, next) => {
  * @method          PUT /api/v1/checks/:checkId
  * @access          Private
  */
-const changeCheckStatus = asyncHandler(async(req, res, next) => {
+const changeCheckStatus = asyncHandler(async (req, res, next) => {
   //Validate request
   const changeCheckStatusValidator = checkValidator.changeCheckStatus;
   await changeCheckStatusValidator.validateAsync(req.body);
 
   const check = await Check.findById(req.params.checkId);
-  //Check if the user is the owner of the check
 
-  if(String(check.user) !== req.user.id){
-    return next(new Error('Not authorized'))
+  //Check if the user is the owner of the check
+  if (String(check.user) !== req.user.id) {
+    return next(new Error("Not authorized"));
   }
 
   //update check status
-  check.paused = req.body.paused
+  check.paused = req.body.paused;
   await check.save();
 
   res.status(200).json({
     success: true,
-    message: "Status changed successfully"
-  })
-})
+    message: "Status changed successfully",
+  });
+});
 
 /**
  * @description     Delete Check
  * @method          DELETE /api/v1/checks/:checkId
  * @access          Private
  */
- const deleteCheck = asyncHandler(async(req, res, next) => {
-
+const deleteCheck = asyncHandler(async (req, res, next) => {
   const check = await Check.findById(req.params.checkId);
   //Check if the user is the owner of the check
 
-  if(String(check.user) !== req.user.id){
-    return next(new Error('Not authorized'))
+  if (String(check.user) !== req.user.id) {
+    return next(new Error("Not authorized"));
   }
 
   //update check status
@@ -69,8 +68,51 @@ const changeCheckStatus = asyncHandler(async(req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "Check deleted successfully"
-  })
-})
+    message: "Check deleted successfully",
+  });
+});
 
-module.exports = { createCheck, changeCheckStatus, deleteCheck };
+/**
+ * @description     Get Checks For User
+ * @method          GET /api/v1/checks
+ * @access          Private
+ */
+const getChecksForUser = asyncHandler(async (req, res, next) => {
+
+  const checks = await Check.find({user: req.user.id});
+
+  res.status(200).json({
+    success: true,
+    count: checks.length,
+    data: checks,
+  });
+});
+
+/**
+ * @description     Get Single Check For User By Check Id
+ * @method          GET /api/v1/checks/checkId
+ * @access          Private
+ */
+ const getSigleCheck = asyncHandler(async (req, res, next) => {
+
+  //Get Check
+  const check = await Check.findById(req.params.checkId);
+
+  //Check if the user is the owner of the check
+  if (String(check.user) !== req.user.id) {
+    return next(new Error("Not authorized"));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: check,
+  });
+});
+
+module.exports = {
+  createCheck,
+  changeCheckStatus,
+  deleteCheck,
+  getChecksForUser,
+  getSigleCheck
+};
