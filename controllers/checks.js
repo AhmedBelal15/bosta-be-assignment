@@ -23,4 +23,30 @@ const createCheck = asyncHandler(async (req, res, next) => {
   })
 });
 
-module.exports = { createCheck };
+/**
+ * @description     Edit Check Status Running/Paused
+ * @method          PUT /api/v1/checks/:checkId
+ * @access          Private
+ */
+const changeCheckStatus = asyncHandler(async(req, res, next) => {
+  //Validate request
+  const changeCheckStatusValidator = checkValidator.changeCheckStatus;
+  await changeCheckStatusValidator.validateAsync(req.body);
+
+  const check = await Check.findById(req.params.checkId);
+  //Check if the user is the owner of the check
+
+  if(String(check.user) !== req.user.id){
+    return next(new Error('Not authorized'))
+  }
+
+  //update check status
+  check.paused = req.body.paused
+  await check.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Status changed successfully"
+  })
+})
+module.exports = { createCheck, changeCheckStatus };
