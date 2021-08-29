@@ -2,10 +2,15 @@ const asyncHandler = require("../middleware/asyncHandler");
 const checkValidator = require("../middleware/checksValidator");
 const Check = require('../models/Check');
 
+/**
+ * @description     Create Check
+ * @method          POST /api/v1/checks
+ * @access          Private
+ */
 const createCheck = asyncHandler(async (req, res, next) => {
   // Validate request
   const createCheckValidator = checkValidator.createCheck;
-  createCheckValidator.validateAsync(req.body);
+  await createCheckValidator.validateAsync(req.body);
 
   // Add user id to the req.body before saving it to data base
   req.body.user = req.user.id;
