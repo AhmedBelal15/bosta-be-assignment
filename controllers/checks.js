@@ -49,4 +49,28 @@ const changeCheckStatus = asyncHandler(async(req, res, next) => {
     message: "Status changed successfully"
   })
 })
-module.exports = { createCheck, changeCheckStatus };
+
+/**
+ * @description     Delete Check
+ * @method          DELETE /api/v1/checks/:checkId
+ * @access          Private
+ */
+ const deleteCheck = asyncHandler(async(req, res, next) => {
+
+  const check = await Check.findById(req.params.checkId);
+  //Check if the user is the owner of the check
+
+  if(String(check.user) !== req.user.id){
+    return next(new Error('Not authorized'))
+  }
+
+  //update check status
+  await check.remove();
+
+  res.status(200).json({
+    success: true,
+    message: "Check deleted successfully"
+  })
+})
+
+module.exports = { createCheck, changeCheckStatus, deleteCheck };
