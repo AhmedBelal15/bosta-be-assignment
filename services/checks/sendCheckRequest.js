@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const { PerformanceObserver, performance } = require("perf_hooks");
 
-const sendRequest = async (url) => {
+const sendCheckRequest = async (url) => {
   performance.mark("start");
   const response = await fetch(url);
   performance.mark("end");
@@ -18,4 +18,4 @@ const sendRequest = async (url) => {
   return response;
 };
 
-module.exports = sendRequest;
+module.exports = sendCheckRequest;
