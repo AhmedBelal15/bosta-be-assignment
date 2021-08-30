@@ -1,9 +1,22 @@
 const fetch = require("node-fetch");
 const { PerformanceObserver, performance } = require("perf_hooks");
+const https = require("https");
+const ignoreSSLAgent = new https.Agent({
+  rejectUnauthorized: false,
+});
 
-const sendCheckRequest = async (url) => {
+const sendCheckRequest = async (url, method, headers, body, ignoreSSL) => {
+  let requestAgent = null;
+  if(ignoreSSL){
+    requestAgent = ignoreSSLAgent
+  }
   performance.mark("start");
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    method,
+    headers,
+    body,
+    agent: requestAgent,
+  });
   performance.mark("end");
 
   let duration;
