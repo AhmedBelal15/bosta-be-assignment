@@ -40,12 +40,7 @@ const CheckSchema = new mongoose.Schema(
       password: String,
     },
     httpHeaders: {
-      type: [
-        {
-          key: String,
-          value: String,
-        },
-      ],
+      type: [{}],
     },
     assert: {
       statusCode: {
