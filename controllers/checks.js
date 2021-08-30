@@ -1,6 +1,8 @@
 const asyncHandler = require("../middleware/asyncHandler");
 const checkValidator = require("../middleware/checksValidator");
 const Check = require("../models/Check");
+const Report = require("../models/Report");
+const initialReport = require('../utils/initialReport');
 
 /**
  * @description     Create Check
@@ -14,8 +16,12 @@ const createCheck = asyncHandler(async (req, res, next) => {
 
   // Add user id to the req.body before saving it to data base
   req.body.user = req.user.id;
-
+  //Create check in database
   const check = await Check.create(req.body);
+
+  //Create initial report
+  await Report.create(initialReport(check.id))
+
   res.status(200).json({
     success: true,
     data: check,
@@ -47,6 +53,7 @@ const changeCheckStatus = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Status changed successfully",
+    tokens: req.tokens,
   });
 });
 
@@ -69,6 +76,7 @@ const deleteCheck = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Check deleted successfully",
+    tokens: req.tokens,
   });
 });
 
@@ -78,13 +86,13 @@ const deleteCheck = asyncHandler(async (req, res, next) => {
  * @access          Private
  */
 const getChecksForUser = asyncHandler(async (req, res, next) => {
-
-  const checks = await Check.find({user: req.user.id});
+  const checks = await Check.find({ user: req.user.id });
 
   res.status(200).json({
     success: true,
     count: checks.length,
     data: checks,
+    tokens: req.tokens,
   });
 });
 
@@ -93,8 +101,7 @@ const getChecksForUser = asyncHandler(async (req, res, next) => {
  * @method          GET /api/v1/checks/checkId
  * @access          Private
  */
- const getSigleCheck = asyncHandler(async (req, res, next) => {
-
+const getSigleCheck = asyncHandler(async (req, res, next) => {
   //Get Check
   const check = await Check.findById(req.params.checkId);
 
@@ -106,6 +113,7 @@ const getChecksForUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: check,
+    tokens: req.tokens,
   });
 });
 
@@ -114,5 +122,5 @@ module.exports = {
   changeCheckStatus,
   deleteCheck,
   getChecksForUser,
-  getSigleCheck
+  getSigleCheck,
 };
