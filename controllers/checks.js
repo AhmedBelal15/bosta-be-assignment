@@ -101,7 +101,7 @@ const getChecksForUser = asyncHandler(async (req, res, next) => {
  * @method          GET /api/v1/checks/checkId
  * @access          Private
  */
-const getSigleCheck = asyncHandler(async (req, res, next) => {
+const getSingleCheck = asyncHandler(async (req, res, next) => {
   //Get Check
   const check = await Check.findById(req.params.checkId);
 
@@ -122,5 +122,5 @@ module.exports = {
   changeCheckStatus,
   deleteCheck,
   getChecksForUser,
-  getSigleCheck,
+  getSingleCheck,
 };
