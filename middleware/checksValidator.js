@@ -14,7 +14,7 @@ const createCheck = Joi.object({
     username: Joi.string().min(2).max(15),
     password: Joi.string().min(6).max(255),
   }),
-  httpHeaders: Joi.array(),
+  httpHeaders: Joi.object(),
   assert: Joi.object().keys({
     statusCode: Joi.number(),
   }),

@@ -25,4 +25,11 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.virtual("user", {
+  ref: "Check",
+  localField: "_id",
+  foreignField: "user",
+  justOne: true,
+});
+
 module.exports = mongoose.model("User", UserSchema);

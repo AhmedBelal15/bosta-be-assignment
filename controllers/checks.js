@@ -2,7 +2,8 @@ const asyncHandler = require("../middleware/asyncHandler");
 const checkValidator = require("../middleware/checksValidator");
 const Check = require("../models/Check");
 const Report = require("../models/Report");
-const initialReport = require('../utils/initialReport');
+const initialReport = require("../utils/initialReport");
+const performChecks = require("../services/checks/performChecks");
 
 /**
  * @description     Create Check
@@ -20,7 +21,7 @@ const createCheck = asyncHandler(async (req, res, next) => {
   const check = await Check.create(req.body);
 
   //Create initial report
-  await Report.create(initialReport(check.id))
+  await Report.create(initialReport(check.id));
 
   res.status(200).json({
     success: true,
@@ -98,7 +99,7 @@ const getChecksForUser = asyncHandler(async (req, res, next) => {
 
 /**
  * @description     Get Single Check For User By Check Id
- * @method          GET /api/v1/checks/checkId
+ * @method          GET /api/v1/checks/:checkId
  * @access          Private
  */
 const getSingleCheck = asyncHandler(async (req, res, next) => {
@@ -117,10 +118,40 @@ const getSingleCheck = asyncHandler(async (req, res, next) => {
   });
 });
 
+/**
+ * @description     Perform Checks On The URLs
+ * @method          GET /api/v1/checks/do
+ * @access          Public
+ */
+const doChecks = asyncHandler(async (req, res, next) => {
+  const checks = await Check.find({
+    nextCheck: { $lte: Date.now() },
+    paused: false,
+  }).populate("user");
+  for (let i = 0; i < checks.length; i++) {
+    const prevReport = await Report.findOne({ check: checks[i].id });
+    const newReport = await performChecks(checks[i], prevReport);
+    const savedReport = await Report.findByIdAndUpdate(
+      prevReport.id,
+      newReport,
+      { new: true }
+    );
+    checks[i].nextCheck = Date.now() + checks[i].interval * 60 * 1000;
+    await checks[i].save()
+    console.log(newReport);
+    savedReport.history.push(newReport);
+    await savedReport.save()
+  }
+
+  res.json(checks);
+  // sendCheckRequest;
+});
+
 module.exports = {
   createCheck,
   changeCheckStatus,
   deleteCheck,
   getChecksForUser,
   getSingleCheck,
+  doChecks,
 };

@@ -15,6 +15,10 @@ const ReportSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    faliuresSinceLastAlert: {
+      type: Number,
+      default: 0
+    },
     downtime: {
       type: Number,
       required: true,
@@ -33,35 +37,7 @@ const ReportSchema = new mongoose.Schema(
       required: true,
     },
     history: {
-      type: [
-        {
-          status: {
-            type: String,
-            required: [true, "Please enter the status of the url"],
-            enum: ["up", "down"],
-          },
-          availability: {
-            type: Number,
-            required: true,
-          },
-          outages: {
-            type: Number,
-            required: true,
-          },
-          downtimes: {
-            type: Number,
-            required: true,
-          },
-          uptime: {
-            type: Number,
-            required: true,
-          },
-          responseTime: {
-            type: Number,
-            required: true,
-          },
-        },
-      ],
+      type: [{}],
     },
   },
   { timestamps: true }
