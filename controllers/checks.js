@@ -119,7 +119,7 @@ const getSingleCheck = asyncHandler(async (req, res, next) => {
 });
 
 /**
- * @description     Get Single Check For User By Check Id
+ * @description     Get Checks by tag
  * @method          GET /api/v1/checks/tag/:tag
  * @access          Private
  */
