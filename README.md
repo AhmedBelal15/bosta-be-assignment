@@ -294,42 +294,6 @@ URL: {{URL}}/api/v1/checks/do
 | Content-Type | application/json | Content Type |
 | refreshToken | {{REFRESH_TOKEN}} |  |
 
-
-
-***Body:***
-
-```js        
-{
-    "name": "JSON",
-    "url": "https://jsonplaceholder.typicode.com/pasdosts",
-    "protocol": "https",
-    "path": "/",
-    "port": 80,
-    "webhook": "https://discord.com/api/webhooks/880226664720777287/LBCLgNxk_57n2gygLKT5l5KC6PT_cAaTc6Ljh1rLqMH3iRo0TEhZNzPoqf20nq1ULFt4",
-    "timeout": 5,
-    "interval": 10,
-    "threshold": 1,
-    "authentication": {
-        "username": "Ahmed",
-        "password": "123456"
-    },
-    "httpHeaders": [
-        {
-            "Content-Type": "application/json"
-        }
-    ],
-    "assert": {
-        "statusCode": 200
-    },
-    "tags": [
-        "socialmedia"
-    ],
-    "ignoreSSL": false
-}
-```
-
-
-
 ---
 [Back to top](#bosta-backend-assignment)
 > Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2021-08-31 06:27:41 by [docgen](https://github.com/thedevsaddam/docgen)
