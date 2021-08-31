@@ -21,7 +21,7 @@ const createCheck = asyncHandler(async (req, res, next) => {
   const check = await Check.create(req.body);
 
   //Create initial report
-  await Report.create(initialReport(check.id));
+  await Report.create(initialReport(check.id, req.user.id, check.tags));
 
   res.status(200).json({
     success: true,

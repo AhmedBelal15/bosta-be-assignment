@@ -1,4 +1,4 @@
-const initialReport = (checkId) => {
+const initialReport = (checkId, userId, tags) => {
   return {
     status: "up",
     availability: 0,
@@ -7,6 +7,8 @@ const initialReport = (checkId) => {
     uptime: 0,
     responseTime: 0,
     check: checkId,
+    user: userId,
+    tags
   };
 };
 module.exports = initialReport;

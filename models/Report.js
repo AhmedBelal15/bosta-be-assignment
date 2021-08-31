@@ -39,6 +39,14 @@ const ReportSchema = new mongoose.Schema(
     history: {
       type: [{}],
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    tags: {
+      type: [String],
+    },
   },
   { timestamps: true }
 );
