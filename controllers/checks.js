@@ -119,6 +119,24 @@ const getSingleCheck = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * @description     Get Single Check For User By Check Id
+ * @method          GET /api/v1/checks/tag/:tag
+ * @access          Private
+ */
+const getChecksByTag = asyncHandler(async (req, res, next) => {
+  //Get Checks
+  const checks = await Check.find({ tag: req.params.tag, user: req.user.id });
+
+  //Check if the user is the owner of the check
+
+  res.status(200).json({
+    success: true,
+    data: checks,
+    tokens: req.tokens,
+  });
+});
+
+/**
  * @description     Perform Checks On The URLs
  * @method          GET /api/v1/checks/do
  * @access          Public
@@ -137,10 +155,10 @@ const doChecks = asyncHandler(async (req, res, next) => {
       { new: true }
     );
     checks[i].nextCheck = Date.now() + checks[i].interval * 60 * 1000;
-    await checks[i].save()
+    await checks[i].save();
     console.log(newReport);
     savedReport.history.push(newReport);
-    await savedReport.save()
+    await savedReport.save();
   }
 
   res.json(checks);
@@ -153,5 +171,6 @@ module.exports = {
   deleteCheck,
   getChecksForUser,
   getSingleCheck,
+  getChecksByTag,
   doChecks,
 };

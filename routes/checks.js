@@ -8,6 +8,7 @@ const {
   deleteCheck,
   getChecksForUser,
   getSingleCheck,
+  getChecksByTag,
   doChecks,
 } = require("../controllers/checks");
 
@@ -23,4 +24,6 @@ router
   .put(changeCheckStatus)
   .delete(deleteCheck)
   .get(getSingleCheck);
+
+router.get("/tag/:tag", getChecksByTag);
 module.exports = router;
