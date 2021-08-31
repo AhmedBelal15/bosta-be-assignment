@@ -16,9 +16,15 @@ This collection is for Bosta backend assignment.
   * [Create Check](#1-create-check)
   * [Delete Check](#2-delete-check)
   * [Edit Check Status](#3-edit-check-status)
-  * [Get Checks For User](#4-get-checks-for-user)
-  * [Get Single Check](#5-get-single-check)
-  * [Perform Checks](#6-perform-checks)
+  * [Get Checks By Tag](#4-get-checks-by-tag)
+  * [Get Checks For User](#5-get-checks-for-user)
+  * [Get Reports By Tag](#6-get-reports-by-tag)
+  * [Get Single Check](#7-get-single-check)
+  * [Perform Checks](#8-perform-checks)
+
+* [Reports](#reports)
+
+  * [Get Rports for User](#1-get-rports-for-user)
 
 
 --------
@@ -30,6 +36,8 @@ This collection is for Bosta backend assignment.
 
 ### 1. Login
 
+
+Login user and generate access/ refresh tokens
 
 
 ***Endpoint:***
@@ -141,8 +149,8 @@ URL: {{URL}}/api/v1/checks
 
 ```js        
 {
-    "name": "Youtube",
-    "url": "http://youtube.com",
+    "name": "JsonPH",
+    "url": "https://jsonplaceholder.typicode.com/todos",
     "protocol": "https",
     "path": "/",
     "port": 80,
@@ -226,7 +234,23 @@ URL: {{URL}}/api/v1/checks/612ae82d15a6303c33627dd1
 
 
 
-### 4. Get Checks For User
+### 4. Get Checks By Tag
+
+
+Get all checks that matches a certain tag
+
+
+***Endpoint:***
+
+```bash
+Method: GET
+Type: 
+URL: {{URL}}/api/v1/checks/tag/socialmedia
+```
+
+
+
+### 5. Get Checks For User
 
 
 Get checks by the user id
@@ -249,7 +273,23 @@ URL: {{URL}}/api/v1/checks
 
 
 
-### 5. Get Single Check
+### 6. Get Reports By Tag
+
+
+Get Reports By Tag and User ID
+
+
+***Endpoint:***
+
+```bash
+Method: GET
+Type: 
+URL: {{URL}}/api/v1/reports/tag/socialmedia
+```
+
+
+
+### 7. Get Single Check
 
 
 Get single check by id
@@ -272,7 +312,7 @@ URL: {{URL}}/api/v1/checks/612ae3fb58b7fef14f01a8fa
 
 
 
-### 6. Perform Checks
+### 8. Perform Checks
 
 
 End Point that will perform checks when someone hit it, Using a cron job to hit it every 1 minute to perform checks.
@@ -282,7 +322,7 @@ End Point that will perform checks when someone hit it, Using a cron job to hit 
 
 ```bash
 Method: GET
-Type: RAW
+Type: 
 URL: {{URL}}/api/v1/checks/do
 ```
 
@@ -294,6 +334,29 @@ URL: {{URL}}/api/v1/checks/do
 | Content-Type | application/json | Content Type |
 | refreshToken | {{REFRESH_TOKEN}} |  |
 
+
+
+## Reports
+Get Reports for user, by tag
+
+
+
+### 1. Get Rports for User
+
+
+Get Rports for User By Id
+
+
+***Endpoint:***
+
+```bash
+Method: GET
+Type: 
+URL: {{URL}}/api/v1/reports
+```
+
+
+
 ---
 [Back to top](#bosta-backend-assignment)
-> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2021-08-31 06:27:41 by [docgen](https://github.com/thedevsaddam/docgen)
+> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2021-08-31 07:13:06 by [docgen](https://github.com/thedevsaddam/docgen)
