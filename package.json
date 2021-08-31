@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "SET NODE_ENV=production& node server",
+    "start": "SET NODE_ENV=production& pm2 start server.js& pm2 start cron.js",
     "dev": "nodemon server"
   },
   "repository": {
@@ -31,5 +31,8 @@
     "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.6.3"
+  },
+  "devDependencies": {
+    "pm2": "^5.1.1"
   }
 }
